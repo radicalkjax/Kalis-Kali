@@ -58,7 +58,7 @@ docker exec -it kali-workspace sh -c "DISPLAY=host.docker.internal:0 <app-name>"
 
 ## Option 2: Full XFCE4 Desktop Environment
 
-For a complete Kali desktop experience in a window.
+For a complete Kali desktop experience with all tools accessible through a proper menu system.
 
 ### Launch Desktop
 
@@ -70,21 +70,58 @@ This will:
 1. Start XQuartz if not running
 2. Configure X11 forwarding
 3. Start socat TCP bridge
-4. Launch XFCE4 desktop in a new window
+4. Install required menu packages
+5. Launch XFCE4 desktop components (window manager, panel, desktop)
 
 ### Desktop Features
 
-- Full XFCE4 desktop environment
-- Application menu with all Kali tools
+- Full XFCE4 desktop environment with window manager
+- Applications Menu with all Kali tools organized by category:
+  - Information Gathering
+  - Vulnerability Analysis
+  - Web Application Analysis
+  - Database Assessment
+  - Password Attacks
+  - Wireless Attacks
+  - Reverse Engineering
+  - Exploitation Tools
+  - Sniffing & Spoofing
+  - Post Exploitation
+  - Forensics
+  - Reporting
+  - Social Engineering Tools
 - File manager (Thunar)
 - Terminal emulator
 - System tray and panels
+- Application Finder (searchable tool launcher)
 - Multiple workspaces
+
+### Menu Troubleshooting
+
+If the Applications Menu doesn't show all Kali tools:
+
+```bash
+# Fix menu entries
+./scripts/fix-applications-menu.sh
+
+# Or for a more thorough fix
+./scripts/fix-kali-tools-menu.sh
+```
+
+### Alternative: Whisker Menu
+
+For a more modern menu experience with search functionality:
+
+```bash
+./scripts/setup-whisker-menu.sh
+```
+
+Then right-click panel → Panel Preferences → Items → Add "Whisker Menu"
 
 ### Stopping the Desktop
 
-- Close the XQuartz window, or
-- Press `Ctrl+C` in the terminal
+- Close all XQuartz windows, or
+- Press `Ctrl+C` in the terminal running kali-desktop.sh
 
 ## Troubleshooting
 

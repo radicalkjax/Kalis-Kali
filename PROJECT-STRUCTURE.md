@@ -30,17 +30,38 @@ Kalis-Kali/
 ├── 📁 scripts/                     # Management and utility scripts
 │   ├── start-kali.sh               # Start standard Kali container
 │   ├── stop-kali.sh                # Stop Kali containers
-│   ├── run-gui.sh                  # Run GUI apps with X11 forwarding
+│   ├── kali-desktop.sh             # Launch full XFCE4 desktop environment
+│   ├── kali-gui-app.sh             # Run individual GUI apps
+│   ├── setup-x11.sh                # Setup X11 forwarding prerequisites
+│   ├── x11-docker.sh               # Start X11 bridge for Docker
 │   ├── setup-claude.sh             # Claude CLI configuration
 │   ├── setup-tools.sh              # Install additional tools
+│   ├── install-all-kali-tools.sh   # Install complete Kali toolset
+│   │
+│   ├── 📁 Menu Fix Scripts         # Fix desktop application menus
+│   ├── fix-applications-menu.sh    # Fix XFCE Applications Menu
+│   ├── fix-kali-tools-menu.sh      # Comprehensive menu & tools fix
+│   ├── setup-whisker-menu.sh       # Install modern Whisker Menu
+│   ├── rebuild-xfce-menu.sh        # Rebuild menu database
+│   │
+│   ├── 📁 Malware Analysis         # Secure malware analysis
 │   ├── setup-malware-analysis.sh   # Malware analysis environment setup
 │   ├── start-malware-lab.sh        # Start insecure malware lab (learning)
 │   ├── start-secure-malware-lab.sh # Start SECURE malware lab
 │   └── safe-analyze.sh             # Safe malware analysis script
 │
 ├── 📁 docs/                        # Documentation
+│   ├── README.md                   # Documentation index
+│   ├── QUICK-START.md              # 5-minute setup guide
+│   ├── SETUP-GUIDE.md              # Detailed installation guide
+│   ├── USAGE-GUIDE.md              # Common workflows and tasks
+│   ├── X11-GUI-Guide.md            # GUI applications and desktop guide
+│   ├── SCRIPTS-REFERENCE.md        # Complete scripts documentation
+│   ├── ARCHITECTURE.md             # System design and diagrams
+│   ├── TOOLS.md                    # Complete tool inventory
+│   ├── MALWARE-ANALYSIS-GUIDE.md   # Malware analysis procedures
 │   ├── SECURITY-WARNING.md         # Critical security information
-│   └── TOOLS.md                    # Complete tool inventory
+│   └── TROUBLESHOOTING.md          # Common issues and solutions
 │
 ├── 📁 workspace/                   # Persistent general workspace
 │

@@ -34,6 +34,8 @@ graph LR
 | 📖 | [docs/SETUP-GUIDE.md](./docs/SETUP-GUIDE.md) | Complete installation walkthrough |
 | ⚡ | [docs/QUICK-START.md](./docs/QUICK-START.md) | 5-minute setup for experienced users |
 | 🛠️ | [docs/USAGE-GUIDE.md](./docs/USAGE-GUIDE.md) | Common tasks and workflows |
+| 🖥️ | [docs/X11-GUI-Guide.md](./docs/X11-GUI-Guide.md) | GUI apps and desktop environment |
+| 📜 | [docs/SCRIPTS-REFERENCE.md](./docs/SCRIPTS-REFERENCE.md) | All scripts documentation |
 | 🔬 | [docs/MALWARE-ANALYSIS-GUIDE.md](./docs/MALWARE-ANALYSIS-GUIDE.md) | Safe malware analysis procedures |
 | ⚠️ | [docs/SECURITY-WARNING.md](./docs/SECURITY-WARNING.md) | **MUST READ** - Critical security info |
 | 🔧 | [docs/TROUBLESHOOTING.md](./docs/TROUBLESHOOTING.md) | Solutions to common problems |

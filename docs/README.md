@@ -6,7 +6,6 @@ Welcome to the comprehensive documentation for the Kali Linux Docker Container p
 
 ### 🏗️ Architecture & Design
 - **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture, container design, and network topology
-- **[CONTAINER-LAYERS.md](./CONTAINER-LAYERS.md)** - Docker image layers and build process
 
 ### 🚀 Getting Started
 - **[SETUP-GUIDE.md](./SETUP-GUIDE.md)** - Complete installation and setup instructions
@@ -14,21 +13,21 @@ Welcome to the comprehensive documentation for the Kali Linux Docker Container p
 
 ### 🔒 Security
 - **[SECURITY-WARNING.md](./SECURITY-WARNING.md)** ⚠️ - Critical security information (MUST READ)
-- **[SECURITY-BEST-PRACTICES.md](./SECURITY-BEST-PRACTICES.md)** - Security guidelines and hardening
 - **[MALWARE-ANALYSIS-GUIDE.md](./MALWARE-ANALYSIS-GUIDE.md)** - Safe malware analysis procedures
 
+### 🖥️ GUI & Desktop
+- **[X11-GUI-Guide.md](./X11-GUI-Guide.md)** - Running GUI applications and full desktop
+- **[GUI-ALTERNATIVES.md](./GUI-ALTERNATIVES.md)** - Modern alternatives to X11 (Xpra, noVNC, etc.)
+
 ### 🛠️ Configuration & Usage
-- **[CONFIGURATION.md](./CONFIGURATION.md)** - Environment variables and customization
 - **[USAGE-GUIDE.md](./USAGE-GUIDE.md)** - Common tasks and workflows
-- **[CLAUDE-INTEGRATION.md](./CLAUDE-INTEGRATION.md)** - Setting up and using Claude CLI
+- **[SCRIPTS-REFERENCE.md](./SCRIPTS-REFERENCE.md)** - Complete script documentation
 
 ### 📦 Tools & Features
 - **[TOOLS.md](./TOOLS.md)** - Complete inventory of included tools
-- **[SCRIPTS-REFERENCE.md](./SCRIPTS-REFERENCE.md)** - Script documentation and usage
 
 ### 🔧 Maintenance
 - **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
-- **[MAINTENANCE.md](./MAINTENANCE.md)** - Updates, backups, and cleanup
 
 ### 📊 Visual Overview
 
