@@ -106,6 +106,121 @@ sleep 2
 echo "Starting desktop background..."
 docker exec -d kali-workspace sh -c "DISPLAY=host.docker.internal:0 xfdesktop --sm-client-disable"
 
+echo "Configuring desktop panel..."
+# Configure vertical panel layout
+docker exec kali-workspace bash -c '
+    # Kill any existing panel
+    pkill xfce4-panel 2>/dev/null
+    sleep 1
+    
+    # Create vertical panel configuration
+    mkdir -p /root/.config/xfce4/xfconf/xfce-perchannel-xml
+    
+    cat > /root/.config/xfce4/xfconf/xfce-perchannel-xml/xfce4-panel.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfce4-panel" version="1.0">
+  <property name="configver" type="int" value="2"/>
+  <property name="panels" type="array">
+    <value type="int" value="1"/>
+    <property name="panel-1" type="empty">
+      <property name="position" type="string" value="p=11;x=0;y=0"/>
+      <property name="position-locked" type="bool" value="true"/>
+      <property name="size" type="uint" value="56"/>
+      <property name="length" type="uint" value="100"/>
+      <property name="plugin-ids" type="array">
+        <value type="int" value="1"/>
+        <value type="int" value="2"/>
+        <value type="int" value="3"/>
+        <value type="int" value="4"/>
+        <value type="int" value="5"/>
+        <value type="int" value="6"/>
+        <value type="int" value="7"/>
+        <value type="int" value="8"/>
+        <value type="int" value="9"/>
+        <value type="int" value="10"/>
+        <value type="int" value="11"/>
+      </property>
+      <property name="mode" type="uint" value="1"/>
+      <property name="autohide-behavior" type="uint" value="0"/>
+      <property name="background-style" type="uint" value="1"/>
+      <property name="background-alpha" type="uint" value="90"/>
+    </property>
+  </property>
+  <property name="plugins" type="empty">
+    <property name="plugin-1" type="string" value="whiskermenu">
+      <property name="button-icon" type="string" value="kali-menu"/>
+      <property name="show-button-title" type="bool" value="false"/>
+    </property>
+    <property name="plugin-2" type="string" value="separator">
+      <property name="style" type="uint" value="1"/>
+    </property>
+    <property name="plugin-3" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="xfce4-terminal.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-4" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="firefox-esr.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-5" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="kali-burpsuite.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-6" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="kali-wireshark.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-7" type="string" value="launcher">
+      <property name="items" type="array">
+        <value type="string" value="thunar.desktop"/>
+      </property>
+    </property>
+    <property name="plugin-8" type="string" value="separator">
+      <property name="style" type="uint" value="1"/>
+    </property>
+    <property name="plugin-9" type="string" value="tasklist">
+      <property name="show-labels" type="bool" value="false"/>
+      <property name="show-handle" type="bool" value="false"/>
+      <property name="flat-buttons" type="bool" value="true"/>
+      <property name="sort-order" type="uint" value="4"/>
+      <property name="grouping" type="uint" value="1"/>
+    </property>
+    <property name="plugin-10" type="string" value="separator">
+      <property name="expand" type="bool" value="true"/>
+      <property name="style" type="uint" value="0"/>
+    </property>
+    <property name="plugin-11" type="string" value="systray">
+      <property name="square-icons" type="bool" value="true"/>
+      <property name="show-frame" type="bool" value="false"/>
+    </property>
+  </property>
+</channel>
+EOF
+    
+    # Configure window manager to respect panel space
+    cat > /root/.config/xfce4/xfconf/xfce-perchannel-xml/xfwm4.xml <<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<channel name="xfwm4" version="1.0">
+  <property name="general" type="empty">
+    <property name="margin_left" type="int" value="58"/>
+    <property name="margin_right" type="int" value="0"/>
+    <property name="margin_top" type="int" value="0"/>
+    <property name="margin_bottom" type="int" value="0"/>
+    <property name="snap_to_border" type="bool" value="true"/>
+    <property name="snap_to_windows" type="bool" value="true"/>
+    <property name="snap_width" type="int" value="10"/>
+  </property>
+</channel>
+EOF
+    
+    # Clear cache
+    rm -rf /root/.cache/sessions/xfce4-panel*
+'
+
 echo "Starting desktop panel..."
 docker exec -d kali-workspace sh -c "DISPLAY=host.docker.internal:0 xfce4-panel --sm-client-disable"
 
@@ -113,16 +228,21 @@ echo "Starting terminal..."
 docker exec -d kali-workspace sh -c "DISPLAY=host.docker.internal:0 xfce4-terminal"
 
 echo ""
-echo "XFCE4 Desktop components launched!"
-echo "================================="
+echo "XFCE4 Desktop launched with Vertical Panel!"
+echo "=========================================="
 echo ""
-echo "You should see:"
-echo "- XFCE4 Panel (taskbar)"
-echo "- Desktop with right-click menu"
-echo "- Terminal window"
-echo "- Application Finder"
+echo "Desktop features:"
+echo "• Vertical panel on left side (56px wide)"
+echo "• Whisker Menu at top (Kali dragon icon)"
+echo "• Quick launchers: Terminal, Firefox, Burp Suite, Wireshark, Files"
+echo "• Task list showing open windows (icons only)"
+echo "• System tray at bottom"
+echo "• Windows automatically tile beside panel"
 echo ""
-echo "Use Application Finder to launch any Kali tool"
+echo "💡 Tips:"
+echo "• Click Kali dragon for all applications"
+echo "• Use quick launchers for common tools"
+echo "• Windows snap to panel edge"
 echo ""
 echo "To stop: Close all windows or press Ctrl+C here"
 

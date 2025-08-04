@@ -58,7 +58,7 @@ docker exec -it kali-workspace sh -c "DISPLAY=host.docker.internal:0 <app-name>"
 
 ## Option 2: Full XFCE4 Desktop Environment
 
-For a complete Kali desktop experience with all tools accessible through a proper menu system.
+For a complete Kali desktop experience with a modern vertical panel layout optimized for security work.
 
 ### Launch Desktop
 
@@ -71,12 +71,13 @@ This will:
 2. Configure X11 forwarding
 3. Start socat TCP bridge
 4. Install required menu packages
-5. Launch XFCE4 desktop components (window manager, panel, desktop)
+5. Configure vertical panel on left side
+6. Launch XFCE4 desktop components (window manager, panel, desktop)
 
 ### Desktop Features
 
-- Full XFCE4 desktop environment with window manager
-- Applications Menu with all Kali tools organized by category:
+- Full XFCE4 desktop with **vertical panel on left** (56px wide)
+- **Whisker Menu** with all Kali tools organized by category:
   - Information Gathering
   - Vulnerability Analysis
   - Web Application Analysis
@@ -90,10 +91,16 @@ This will:
   - Forensics
   - Reporting
   - Social Engineering Tools
-- File manager (Thunar)
-- Terminal emulator
-- System tray and panels
-- Application Finder (searchable tool launcher)
+- **Quick launchers** for common tools:
+  - Terminal
+  - Firefox
+  - Burp Suite
+  - Wireshark
+  - File Manager
+- Task list (icons only) for open windows
+- System tray at bottom
+- Windows automatically tile beside panel
+- Semi-transparent panel (90% opacity)
 - Multiple workspaces
 
 ### Menu Troubleshooting
