@@ -1,0 +1,10 @@
+.git
+.gitignore
+.DS_Store
+*.swp
+*.tmp
+workspace/*
+config/*
+README.md
+.env
+.env.example

@@ -1,0 +1,42 @@
+services:
+  kali:
+    build:
+      context: .
+      dockerfile: docker/base/Dockerfile
+    image: kali-custom:latest
+    container_name: kali-workspace
+    hostname: kali-docker
+    environment:
+      - DISPLAY=host.docker.internal:0
+      - DEBIAN_FRONTEND=noninteractive
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY:-}
+      - CLAUDE_AUTH_METHOD=${CLAUDE_AUTH_METHOD:-}
+    volumes:
+      - ./workspace:/home/kali/workspace
+      - ./config:/home/kali/.config
+      - ./scripts:/home/kali/scripts:ro
+      - /tmp/.X11-unix:/tmp/.X11-unix:rw
+      - ~/.Xauthority:/home/kali/.Xauthority:rw
+    # No ports needed - X11 forwarding only
+    networks:
+      - kali-net
+    privileged: true
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+
+  kali-headless:
+    image: kalilinux/kali-rolling:latest
+    container_name: kali-headless
+    hostname: kali-headless
+    volumes:
+      - ./workspace:/workspace
+      - ./scripts:/scripts
+    networks:
+      - kali-net
+    command: tail -f /dev/null
+    restart: unless-stopped
+
+networks:
+  kali-net:
+    driver: bridge
