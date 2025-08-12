@@ -1,89 +1,149 @@
-# 📚 Kali Linux Docker Documentation
+# Documentation
 
-Welcome to the comprehensive documentation for the Kali Linux Docker Container project. This documentation is designed with visual learners in mind, featuring Mermaid diagrams throughout.
+Complete documentation for the Kali Linux Docker Desktop Environment.
 
-## 📖 Documentation Index
+## 🚀 Start Here
 
-### 🏗️ Architecture & Design
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture, container design, and network topology
+```bash
+# One command starts everything
+./start.sh
+```
 
-### 🚀 Getting Started
-- **[SETUP-GUIDE.md](./SETUP-GUIDE.md)** - Complete installation and setup instructions
-- **[QUICK-START.md](./QUICK-START.md)** - Fast track guide for experienced users
+**New to this project?** → [Getting Started](getting-started/README.md)  
+**Need help?** → [Troubleshooting](troubleshooting/common-issues.md)  
+**Want details?** → Keep reading below
 
-### 🔒 Security
-- **[SECURITY-WARNING.md](./SECURITY-WARNING.md)** ⚠️ - Critical security information (MUST READ)
-- **[MALWARE-ANALYSIS-GUIDE.md](./MALWARE-ANALYSIS-GUIDE.md)** - Safe malware analysis procedures
+## 📁 Documentation Structure
 
-### 🖥️ GUI & Desktop
-- **[X11-GUI-Guide.md](./X11-GUI-Guide.md)** - Running GUI applications and full desktop
-- **[GUI-ALTERNATIVES.md](./GUI-ALTERNATIVES.md)** - Modern alternatives to X11 (Xpra, noVNC, etc.)
-
-### 🛠️ Configuration & Usage
-- **[USAGE-GUIDE.md](./USAGE-GUIDE.md)** - Common tasks and workflows
-- **[SCRIPTS-REFERENCE.md](./SCRIPTS-REFERENCE.md)** - Complete script documentation
-
-### 📦 Tools & Features
-- **[TOOLS.md](./TOOLS.md)** - Complete inventory of included tools
-
-### 🔧 Maintenance
-- **[TROUBLESHOOTING.md](./TROUBLESHOOTING.md)** - Common issues and solutions
-
-### 📊 Visual Overview
-
-```mermaid
-graph TB
-    A[Kali Docker Project] --> B[Standard Container]
-    A --> C[Malware Analysis]
-    
-    B --> D[GUI Access]
-    B --> E[Development Tools]
-    B --> F[Security Tools]
-    
-    C --> G[Static Analysis]
-    C --> H[Dynamic Analysis]
-    C --> I[Sandbox]
-    
-    D --> J[X11 Forwarding]
-    D --> K[Native Windows]
-    
-    G --> L[No Network]
-    H --> M[Isolated Network]
-    I --> N[Honeypot Network]
-    
-    style A fill:#f9f,stroke:#333,stroke-width:4px
-    style C fill:#f66,stroke:#333,stroke-width:2px
-    style G fill:#9f9,stroke:#333,stroke-width:2px
+```
+docs/
+├── getting-started/    # Installation and first steps
+├── guides/            # How-to guides for daily use
+├── reference/         # Technical specifications
+├── troubleshooting/   # Problem solving
+├── architecture/      # System design
+└── advanced/          # Historical/specialized topics
 ```
 
 ## 🎯 Quick Navigation
 
-### For New Users
-1. Start with [SETUP-GUIDE.md](./SETUP-GUIDE.md)
-2. Read [SECURITY-WARNING.md](./SECURITY-WARNING.md)
-3. Follow [QUICK-START.md](./QUICK-START.md)
+### By Task
 
-### For Malware Analysts
-1. **MUST READ**: [SECURITY-WARNING.md](./SECURITY-WARNING.md)
-2. Study [MALWARE-ANALYSIS-GUIDE.md](./MALWARE-ANALYSIS-GUIDE.md)
-3. Review [SECURITY-BEST-PRACTICES.md](./SECURITY-BEST-PRACTICES.md)
+| I want to... | Go to |
+|-------------|-------|
+| Install everything | [Getting Started](getting-started/README.md) |
+| Start the desktop | [Quick Start](getting-started/quickstart.md) |
+| Run GUI applications | [GUI Applications](guides/gui-applications.md) |
+| Use daily | [Daily Usage](guides/daily-usage.md) |
+| Analyze malware | [Malware Analysis](guides/malware-analysis.md) |
+| Fix problems | [Common Issues](troubleshooting/common-issues.md) |
+| See all scripts | [Scripts Reference](reference/scripts.md) |
+| View all tools | [Tools List](reference/tools.md) |
 
-### For Developers
-1. Check [ARCHITECTURE.md](./ARCHITECTURE.md)
-2. Read [CONFIGURATION.md](./CONFIGURATION.md)
-3. See [SCRIPTS-REFERENCE.md](./SCRIPTS-REFERENCE.md)
+### By Experience Level
 
-## 📝 Documentation Standards
+| Level | Start With | Then Read |
+|-------|------------|-----------|
+| **Beginner** | [Getting Started](getting-started/README.md) | [Daily Usage](guides/daily-usage.md) |
+| **Intermediate** | [Quick Start](getting-started/quickstart.md) | [Scripts Reference](reference/scripts.md) |
+| **Expert** | [Scripts Reference](reference/scripts.md) | [System Design](architecture/system-design.md) |
 
-All documentation in this project follows these standards:
-- **Mermaid Diagrams** for visual representation
-- **Clear Headers** with emoji indicators
-- **Code Examples** with syntax highlighting
-- **Tables** for quick reference
-- **Links** to related documentation
+## 📚 Complete Documentation
 
-## 🔄 Version
+### Getting Started
+- [**Overview**](getting-started/README.md) - Start here for installation
+- [**Installation**](getting-started/installation.md) - Detailed setup steps
+- [**Quick Start**](getting-started/quickstart.md) - Fast 5-minute setup
+- [**Docker Auto-Start**](getting-started/docker-autostart.md) - Automatic Docker management
 
-Documentation Version: 1.0.0
-Last Updated: January 2025
-Compatible with: kalilinux/kali-rolling:latest
+### Guides
+- [**Daily Usage**](guides/daily-usage.md) - Common workflows and tasks
+- [**GUI Applications**](guides/gui-applications.md) - Running graphical tools with X11
+- [**Malware Analysis**](guides/malware-analysis.md) - Isolated analysis environment
+- [**GUI Alternatives**](guides/gui-alternatives.md) - VNC and other options
+
+### Reference
+- [**Scripts**](reference/scripts.md) - All 15 essential scripts documented
+- [**Tools**](reference/tools.md) - 100+ included security tools
+- [**Project Structure**](reference/structure.md) - Repository organization
+- [**Quick Reference**](QUICK-REFERENCE.md) - Command cheatsheet
+
+### Troubleshooting
+- [**Common Issues**](troubleshooting/common-issues.md) - Solutions to frequent problems
+- [**Menu Issues**](troubleshooting/menu-issues.md) - Fixing Kali menu problems
+- [**Security**](troubleshooting/security.md) - Security best practices
+
+### Architecture
+- [**System Design**](architecture/system-design.md) - How everything works together
+
+### Advanced
+- [**Panel Customization**](advanced/panel-customization.md) - UI modifications
+- [**Script Migration**](advanced/script-migration.md) - Recent consolidation details
+- [**Cleanup History**](advanced/cleanup-history.md) - Project optimization history
+- [**Docs History**](advanced/docs-history.md) - Documentation changes
+
+## 🔍 Essential Commands
+
+```bash
+# Start/Stop
+./start.sh                          # Start everything
+./scripts/core/stop.sh             # Stop container
+
+# Access
+docker exec -it kali-workspace /bin/zsh    # Shell access
+./scripts/desktop/launch-app.sh firefox    # Launch app
+
+# Tools
+docker exec kali-workspace /home/kali/scripts/tools/install-core.sh  # Install tools
+
+# Fix Issues
+docker exec kali-workspace /home/kali/scripts/desktop/configure-menu.sh  # Fix menus
+```
+
+See [Quick Reference](QUICK-REFERENCE.md) for more commands.
+
+## 📊 Current State
+
+- **15 essential scripts** (consolidated from 52)
+- **6 documentation categories** for organization
+- **100+ security tools** included
+- **3 container modes** (standard, malware, isolated)
+- **Auto-start Docker** feature
+- **Smart error detection** for X server and sessions
+
+## 🔗 How Docs Connect
+
+```mermaid
+graph LR
+    A[README] --> B[Getting Started]
+    B --> C[Guides]
+    B --> D[Reference]
+    C --> E[Troubleshooting]
+    D --> E
+    E --> F[Scripts/Tools]
+    
+    style A fill:#e8f5e9
+    style B fill:#fff3e0
+    style E fill:#ffebee
+```
+
+## 💡 Tips for Using These Docs
+
+1. **Start with Getting Started** if new to the project
+2. **Use Quick Reference** for daily command lookup  
+3. **Check Troubleshooting** when something breaks
+4. **Read Architecture** to understand the design
+5. **Advanced section** is mostly historical reference
+
+## 📝 Contributing
+
+When updating docs:
+1. Use lowercase filenames with hyphens
+2. Keep files in appropriate category folders
+3. Update cross-references when moving files
+4. Test all commands before documenting
+5. Keep language clear and concise
+
+---
+
+**Quick Access:** [Get Started](getting-started/README.md) | [Commands](QUICK-REFERENCE.md) | [Scripts](reference/scripts.md) | [Help](troubleshooting/common-issues.md)

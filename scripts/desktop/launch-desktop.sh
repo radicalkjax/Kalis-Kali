@@ -95,6 +95,27 @@ if ! docker ps --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
     exit 1
 fi
 
+# Check if desktop session is already running (for desktop mode only)
+if [ "$MODE" == "desktop" ] && [ -z "$APP" ]; then
+    if docker exec $CONTAINER_NAME pgrep -x 'xfce4-session' > /dev/null 2>&1 || \
+       docker exec $CONTAINER_NAME pgrep -x 'xfce4-panel' > /dev/null 2>&1; then
+        print_msg "Desktop session already running!"
+        print_info "An XFCE4 desktop session is already active."
+        print_info "Please wait for the existing desktop window to appear."
+        echo ""
+        echo "If the desktop window is not visible:"
+        echo "  • Check if XQuartz is running (look for the XQuartz icon)"
+        echo "  • Try clicking on the XQuartz icon in the dock"
+        echo "  • Look for a window titled \"kali-workspace\""
+        echo ""
+        echo "To start fresh:"
+        echo "  1. Close any existing desktop windows"
+        echo "  2. Run: ./scripts/core/stop.sh"
+        echo "  3. Run: ./start.sh"
+        exit 0
+    fi
+fi
+
 # macOS X11 setup
 if [[ "$OSTYPE" == "darwin"* ]]; then
     # Check XQuartz
@@ -139,41 +160,41 @@ case $MODE in
                     -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
-                    bash -c "startxfce4 --replace"
+                    bash -c "startxfce4 --replace 2>/dev/null"
             else
                 docker exec -d -e DISPLAY=host.docker.internal:0 \
                     -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
-                    bash -c "startxfce4 --replace" 2>/dev/null
+                    bash -c "startxfce4 --replace 2>/dev/null" 2>/dev/null
                 print_msg "Minimal desktop launched in background"
             fi
         else
             print_msg "Launching full XFCE4 desktop..."
             
             # Ensure desktop packages are installed
-            docker exec $CONTAINER_NAME bash -c "
-                pkgs='xfce4-session xfce4-panel xfce4-terminal xfdesktop4 xfwm4 
+            docker exec $CONTAINER_NAME bash -c '
+                pkgs="xfce4-session xfce4-panel xfce4-terminal xfdesktop4 xfwm4 
                       xfce4-settings xfce4-whiskermenu-plugin thunar
-                      xfce4-power-manager xfce4-screenshooter'
+                      xfce4-power-manager xfce4-screenshooter"
                 
-                missing=''
-                for pkg in \$pkgs; do
-                    if ! dpkg -l | grep -q \"^ii  \$pkg\"; then
-                        missing=\"\$missing \$pkg\"
+                missing=""
+                for pkg in $pkgs; do
+                    if ! dpkg -l | grep -q "^ii  $pkg"; then
+                        missing="$missing $pkg"
                     fi
                 done
                 
-                if [ -n \"\$missing\" ]; then
-                    echo 'Installing missing desktop components...'
+                if [ -n "$missing" ]; then
+                    echo "Installing missing desktop components..."
                     apt-get update >/dev/null 2>&1
-                    apt-get install -y \$missing >/dev/null 2>&1
+                    apt-get install -y $missing >/dev/null 2>&1
                 fi
-            " 2>/dev/null
+            ' 2>/dev/null
             
             # Configure and launch
             print_msg "Configuring desktop environment..."
-            docker exec $CONTAINER_NAME bash -c "
+            docker exec $CONTAINER_NAME bash -c '
                 # Ensure directories exist
                 mkdir -p /home/kali/.config/xfce4/panel
                 mkdir -p /home/kali/.config/xfce4/xfconf/xfce-perchannel-xml
@@ -182,8 +203,10 @@ case $MODE in
                 chown -R kali:kali /home/kali/.config
                 
                 # Configure menu system
-                /home/kali/scripts/desktop/configure-menu.sh 2>/dev/null || true
-            " 2>/dev/null
+                if [ -f /home/kali/scripts/desktop/configure-menu.sh ]; then
+                    /home/kali/scripts/desktop/configure-menu.sh 2>/dev/null || true
+                fi
+            ' 2>/dev/null
             
             # Launch desktop
             # Check if we have a TTY
@@ -205,11 +228,61 @@ case $MODE in
                             eval \$(dbus-launch --sh-syntax)
                         fi
                         
-                        # Launch desktop
-                        startxfce4
+                        # Launch desktop (capture X server error)
+                        OUTPUT=\$(startxfce4 2>&1)
+                        if echo "\$OUTPUT" | grep -q "X server already running"; then
+                            echo ''
+                            echo '================================'
+                            echo '✓ X server already running on display!'
+                            echo '================================'
+                            echo ''
+                            echo 'A desktop session is already using this display.'
+                            echo 'The existing desktop window should be visible.'
+                            echo ''
+                            echo 'If you cannot see the desktop window:'
+                            echo '  • Click on the XQuartz icon in the dock'
+                            echo '  • Look for a window titled "kali-workspace"'
+                            echo '  • Check Mission Control for the window'
+                            echo ''
+                            echo 'To start a fresh session:'
+                            echo '  1. Close the existing desktop window'
+                            echo '  2. Run: ./scripts/core/stop.sh'
+                            echo '  3. Run: ./start.sh'
+                            echo ''
+                        else
+                            # Show any other errors if they occur
+                            if [ -n "\$OUTPUT" ]; then
+                                echo "\$OUTPUT"
+                            fi
+                        fi
                     "
             else
                 # Non-interactive mode (detached)
+                # First do a quick check to see if X server is already in use
+                X_CHECK=$(docker exec -e DISPLAY=host.docker.internal:0 \
+                    -e XAUTHORITY=/home/kali/.Xauthority \
+                    --user kali \
+                    $CONTAINER_NAME \
+                    bash -c "timeout 1 startxfce4 2>&1" || true)
+                
+                if echo "$X_CHECK" | grep -q "X server already running"; then
+                    print_msg "X server already running on display!"
+                    print_info "A desktop session is already using display host.docker.internal:0"
+                    echo ""
+                    echo "The existing desktop window should be visible."
+                    echo "If you cannot see it:"
+                    echo "  • Click on the XQuartz icon in the dock"
+                    echo "  • Look for a window titled \"kali-workspace\""
+                    echo "  • Check Mission Control (F3 key)"
+                    echo ""
+                    echo "To start a fresh session:"
+                    echo "  1. Close the existing desktop window"
+                    echo "  2. Run: ./scripts/core/stop.sh"
+                    echo "  3. Run: ./start.sh"
+                    exit 0
+                fi
+                
+                # Now actually launch in detached mode
                 docker exec -d -e DISPLAY=host.docker.internal:0 \
                     -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
@@ -226,8 +299,33 @@ case $MODE in
                             eval \$(dbus-launch --sh-syntax)
                         fi
                         
-                        # Launch desktop
-                        startxfce4
+                        # Launch desktop (capture X server error)
+                        OUTPUT=\$(startxfce4 2>&1)
+                        if echo "\$OUTPUT" | grep -q "X server already running"; then
+                            echo ''
+                            echo '================================'
+                            echo '✓ X server already running on display!'
+                            echo '================================'
+                            echo ''
+                            echo 'A desktop session is already using this display.'
+                            echo 'The existing desktop window should be visible.'
+                            echo ''
+                            echo 'If you cannot see the desktop window:'
+                            echo '  • Click on the XQuartz icon in the dock'
+                            echo '  • Look for a window titled "kali-workspace"'
+                            echo '  • Check Mission Control for the window'
+                            echo ''
+                            echo 'To start a fresh session:'
+                            echo '  1. Close the existing desktop window'
+                            echo '  2. Run: ./scripts/core/stop.sh'
+                            echo '  3. Run: ./start.sh'
+                            echo ''
+                        else
+                            # Show any other errors if they occur
+                            if [ -n "\$OUTPUT" ]; then
+                                echo "\$OUTPUT"
+                            fi
+                        fi
                     " 2>/dev/null
                 print_msg "Desktop launched in background mode"
                 print_info "The desktop should appear in a few seconds"

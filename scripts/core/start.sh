@@ -9,6 +9,7 @@ set -e
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
 NC='\033[0m' # No Color
 
 # Default values
@@ -28,6 +29,10 @@ print_error() {
 
 print_warning() {
     echo -e "${YELLOW}[*]${NC} $1"
+}
+
+print_info() {
+    echo -e "${CYAN}[i]${NC} $1"
 }
 
 # Parse command line arguments

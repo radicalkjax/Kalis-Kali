@@ -82,11 +82,4 @@ fi
 # Launch desktop
 echo -e "${GREEN}[+]${NC} Launching Kali desktop..."
 ./scripts/desktop/launch-desktop.sh
-
-echo ""
-echo -e "${GREEN}[+]${NC} Desktop launched!"
-echo ""
-echo "Quick commands:"
-echo "  • Open terminal in desktop: Right-click → Open Terminal"
-echo "  • Access tools: Click Kali menu (top-left)"
-echo "  • Stop container: ./scripts/core/stop.sh"
+# The launch script will handle all messages including if desktop is already running
