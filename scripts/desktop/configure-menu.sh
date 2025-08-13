@@ -44,20 +44,24 @@ fi
 
 # Step 3: Create necessary directories
 print_msg "Creating menu directories..."
-mkdir -p /etc/xdg/menus/applications-merged
-mkdir -p /home/kali/.config/xfce4/panel
-mkdir -p /home/kali/.config/xfce4/xfconf/xfce-perchannel-xml
-mkdir -p /home/kali/.config/menus
+# Try to create system directories (will fail silently if not root)
+mkdir -p /etc/xdg/menus/applications-merged 2>/dev/null || true
+# User directories
+mkdir -p /home/kali/.config/xfce4/panel 2>/dev/null || true
+mkdir -p /home/kali/.config/xfce4/xfconf/xfce-perchannel-xml 2>/dev/null || true
+mkdir -p /home/kali/.config/menus 2>/dev/null || true
 
 # Step 4: Update kali menu if command exists
 if [ -x /usr/share/kali-menu/update-kali-menu ]; then
     print_msg "Updating Kali menu database..."
-    /usr/share/kali-menu/update-kali-menu
+    # Try to update, will fail silently if not root
+    /usr/share/kali-menu/update-kali-menu 2>/dev/null || true
 fi
 
 # Step 5: Configure XFCE to merge Kali menus
 print_msg "Configuring XFCE menu integration..."
-cat > /etc/xdg/menus/xfce-applications.menu << 'EOF'
+# Try to create system menu file (will fail silently if not root)
+cat > /etc/xdg/menus/xfce-applications.menu 2>/dev/null << 'EOF'
 <!DOCTYPE Menu PUBLIC "-//freedesktop//DTD Menu 1.0//EN"
   "http://www.freedesktop.org/standards/menu-spec/1.0/menu.dtd">
 <Menu>
@@ -164,6 +168,9 @@ cat > /etc/xdg/menus/xfce-applications.menu << 'EOF'
     </Menu>
 </Menu>
 EOF
+
+# The above cat command will fail silently if not root
+# Continue with user-level configuration
 
 # Step 6: Create user menu configuration
 print_msg "Setting up user menu configuration..."

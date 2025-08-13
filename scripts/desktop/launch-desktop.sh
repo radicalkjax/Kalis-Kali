@@ -140,7 +140,8 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     
     # Set X11 permissions
     export DISPLAY=:0
-    xhost +localhost >/dev/null 2>&1
+    xhost +localhost >/dev/null 2>&1 || true
+    xhost +local:docker >/dev/null 2>&1 || true
     
     # Check for socat bridge (needed for container X11)
     if ! pgrep -f "socat.*6000" > /dev/null; then
@@ -157,13 +158,11 @@ case $MODE in
             print_msg "Launching minimal XFCE4 desktop..."
             if [ -t 0 ]; then
                 docker exec -it -e DISPLAY=host.docker.internal:0 \
-                    -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
                     bash -c "startxfce4 --replace 2>/dev/null"
             else
                 docker exec -d -e DISPLAY=host.docker.internal:0 \
-                    -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
                     bash -c "startxfce4 --replace 2>/dev/null" 2>/dev/null
@@ -206,14 +205,44 @@ case $MODE in
                 if [ -f /home/kali/scripts/desktop/configure-menu.sh ]; then
                     /home/kali/scripts/desktop/configure-menu.sh 2>/dev/null || true
                 fi
-            ' 2>/dev/null
+            '
+            
+            # Ensure Kali tools are installed (run as root separately)
+            print_msg "Checking Kali tools installation..."
+            docker exec -u root $CONTAINER_NAME bash -c '
+                if [ -f /home/kali/scripts/utils/ensure-kali-tools.sh ]; then
+                    chmod +x /home/kali/scripts/utils/ensure-kali-tools.sh 2>/dev/null || true
+                    /home/kali/scripts/utils/ensure-kali-tools.sh
+                fi
+            '
+            
+            # Reconfigure menu after tools installation to populate categories
+            print_msg "Refreshing menu configuration with installed tools..."
+            docker exec $CONTAINER_NAME bash -c '
+                # Update Kali menu database
+                if [ -x /usr/share/kali-menu/update-kali-menu ]; then
+                    /usr/share/kali-menu/update-kali-menu 2>/dev/null || true
+                fi
+                
+                # Update desktop database
+                update-desktop-database /usr/share/applications 2>/dev/null || true
+                xdg-desktop-menu forceupdate 2>/dev/null || true
+                
+                # Clear menu caches to force refresh
+                rm -rf /home/kali/.cache/xfce4/xfce4-appfinder 2>/dev/null || true
+                rm -rf /home/kali/.cache/menus 2>/dev/null || true
+                
+                # Restart panel if running to load new menu
+                if pgrep -x "xfce4-panel" > /dev/null; then
+                    xfce4-panel -r 2>/dev/null || true
+                fi
+            '
             
             # Launch desktop
             # Check if we have a TTY
             if [ -t 0 ]; then
                 # Interactive mode
                 docker exec -it -e DISPLAY=host.docker.internal:0 \
-                    -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
                     bash -c "
@@ -260,7 +289,6 @@ case $MODE in
                 # Non-interactive mode (detached)
                 # First do a quick check to see if X server is already in use
                 X_CHECK=$(docker exec -e DISPLAY=host.docker.internal:0 \
-                    -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
                     bash -c "timeout 1 startxfce4 2>&1" || true)
@@ -284,7 +312,6 @@ case $MODE in
                 
                 # Now actually launch in detached mode
                 docker exec -d -e DISPLAY=host.docker.internal:0 \
-                    -e XAUTHORITY=/home/kali/.Xauthority \
                     --user kali \
                     $CONTAINER_NAME \
                     bash -c "

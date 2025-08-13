@@ -135,7 +135,7 @@ fi
 Run the test script to verify everything works:
 
 ```bash
-./test-universal-launch.sh
+./scripts/testing/test-universal-launch.sh
 ```
 
 Expected output:

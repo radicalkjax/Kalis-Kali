@@ -60,8 +60,8 @@ docker --version
 # Check XQuartz (macOS)
 xquartz --version
 
-# Test the setup
-./test-universal-launch.sh
+# Test the setup (optional)
+./scripts/testing/test-universal-launch.sh
 ```
 
 ### Step 2: Container Modes

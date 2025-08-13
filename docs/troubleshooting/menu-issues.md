@@ -33,7 +33,7 @@ The Kali-specific whisker menu categories (01-20) were not appearing because the
 
 1. **Rebuild the Docker image:**
    ```bash
-   ./rebuild-with-menu-fix.sh
+   ./scripts/core/rebuild.sh
    ```
    Or manually:
    ```bash
