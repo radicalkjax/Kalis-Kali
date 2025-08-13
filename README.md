@@ -1,6 +1,10 @@
 # Kali Linux Docker Desktop Environment
 
-A fully-featured Kali Linux desktop environment running in Docker with seamless macOS integration via XQuartz.
+**Version:** 0.5-alpha  
+**Last Updated:** August 2024  
+**Status:** ⚠️ Partially Working - Active Development
+
+A fully-featured Kali Linux desktop environment running in Docker with seamless macOS integration via XQuartz. Features a vertical panel with quick-launch tools, comprehensive Kali tools installation, and automated configuration management.
 
 ## 🚀 Quick Start
 
@@ -17,14 +21,35 @@ That's it! The desktop will appear in a few seconds. No manual Docker startup ne
 
 ## ✨ Features
 
+### Core Features
 - **One-click launch** - `./start.sh` handles everything automatically
-- **Full Kali desktop** - Complete XFCE4 environment with all tools
-- **Auto-starts Docker** - No need to manually start Docker Desktop
-- **Smart session detection** - Detects and handles existing sessions gracefully
-- **Persistent workspace** - Your files and settings are preserved
-- **Malware analysis mode** - Isolated environment for security research
-- **Panel tools ready** - Quick access to Ghidra, Wireshark, Rizin-Cutter, YARA
-- **Claude CLI integrated** - AI-powered assistance built-in
+- **Full Kali desktop** - Complete XFCE4 environment with vertical panel
+- **Auto-starts Docker** - Detects and starts Docker Desktop on macOS
+- **Smart session detection** - Handles existing X11 sessions gracefully
+- **Persistent workspace** - Files and settings preserved across sessions
+
+### Desktop Environment
+- **Vertical panel** - Left-side 56px panel with tool launchers
+- **Whisker menu** - Hierarchical menu with Kali categories (partial support)
+- **Quick launchers** - Direct access to:
+  - Terminal, File Manager, Firefox
+  - Ghidra, Rizin-Cutter, EDB Debugger
+  - Wireshark, Radare2, Binwalk
+  - Hexedit, YARA, Volatility3
+  - Objdump, Strings, Hexdump
+- **Auto-disable sleep** - Prevents container logout/sleep issues
+
+### Tools & Security
+- **Kali tools packages** - Automatic installation of:
+  - kali-tools-forensics
+  - kali-tools-reverse-engineering
+  - kali-tools-information-gathering
+  - kali-tools-exploitation
+  - kali-tools-post-exploitation
+  - kali-tools-reporting
+  - kali-tools-crypto-stego
+- **Malware analysis mode** - Isolated environment setup
+- **Claude CLI integrated** - AI assistance (when configured)
 
 ## 📖 Documentation
 
@@ -88,19 +113,47 @@ All documentation is organized in the [`docs/`](docs/) directory:
 
 ```
 .
-├── start.sh              # Quick start script
-├── launch.sh             # Interactive launcher
-├── scripts/              # Organized scripts (15 essential scripts)
-│   ├── core/            # Container management (start, stop, rebuild)
-│   ├── desktop/         # Desktop and apps (launch-desktop, launch-app, configure-menu)
-│   ├── tools/           # Tool installation (install-core, install-full, install-malware)
-│   ├── malware/         # Malware analysis (analyze, setup-lab)
-│   └── utils/           # Utilities (backup, debug, ensure-tools, configure-icons)
+├── start.sh              # Main entry point - starts everything
+├── launch.sh             # Interactive launcher (if exists)
+├── scripts/              # All operational scripts
+│   ├── core/            # Container lifecycle
+│   │   ├── start.sh     # Start container with mounts
+│   │   ├── stop.sh      # Stop container gracefully
+│   │   └── rebuild.sh   # Rebuild from Dockerfile
+│   ├── desktop/         # Desktop environment
+│   │   ├── launch-desktop.sh  # Main desktop launcher
+│   │   ├── launch-app.sh      # Individual app launcher
+│   │   └── configure-menu.sh  # Menu system configuration
+│   ├── tools/           # Tool installation
+│   │   ├── install-core.sh    # Essential tools
+│   │   ├── install-full.sh    # Complete toolset
+│   │   └── install-malware.sh # Malware analysis tools
+│   ├── malware/         # Malware analysis
+│   │   ├── analyze.sh   # Run analysis
+│   │   └── setup-lab.sh # Setup isolated lab
+│   ├── utils/           # Support utilities
+│   │   ├── ensure-kali-tools.sh    # Auto-install Kali packages
+│   │   ├── ensure-panel-tools.sh   # Install panel launchers
+│   │   ├── disable-sleep-mode.sh   # Prevent auto-logout
+│   │   ├── configure-panel-icons.sh # Setup launcher icons
+│   │   └── debug-menu.sh           # Debug menu issues
+│   └── deprecated/      # 47 legacy scripts (for reference)
 ├── docker/              # Docker configuration
-│   └── base/           # Dockerfile and configs
-├── docs/                # All documentation
-├── workspace/           # Persistent user files
-└── config/             # Persistent configurations
+│   └── base/           
+│       └── Dockerfile   # Main container definition
+├── config/              # Persistent configurations
+│   ├── xfce4/          # Desktop environment settings
+│   │   ├── panel/      # Panel launchers (1-28)
+│   │   └── xfconf/     # XFCE configuration
+│   └── menus/          # Menu definitions
+├── docs/                # Comprehensive documentation
+│   ├── getting-started/ # Installation and setup
+│   ├── guides/         # How-to guides
+│   ├── reference/      # Technical specs
+│   ├── troubleshooting/# Problem solving
+│   ├── architecture/   # System design
+│   └── advanced/       # Historical/specialized
+└── workspace/          # User files (persistent)
 ```
 
 ## 🔒 Security Features
@@ -110,14 +163,31 @@ All documentation is organized in the [`docs/`](docs/) directory:
 - **Persistent but isolated** - Workspace isolated from host
 - **Read-only samples** - Malware samples mounted read-only
 
-## 💡 Key Improvements
+## 📊 Current State & Known Issues
 
-This project recently underwent major reorganization:
-- **52 scripts → 15 essential scripts** (71% reduction)
-- **Eliminated duplication** - Single source of truth for each function
-- **Smart error handling** - Detects existing sessions, X server conflicts
-- **Auto-recovery** - Handles common issues automatically
-- **Clean output** - Suppresses unnecessary warnings, shows helpful messages
+### ✅ Working Features
+- Container startup and Docker auto-launch
+- XFCE4 desktop environment with vertical panel
+- Panel tool launchers (all 28 configured)
+- Kali tools installation (218+ tools)
+- X11 forwarding via XQuartz
+- Sleep mode prevention
+- Persistent workspace
+
+### ⚠️ Known Issues
+- **Whisker Menu**: Categories not fully populating despite tools being installed
+  - Only "Forensics" category visible
+  - Menu structure changed from numbered (01-15) to named categories
+  - `load-hierarchy=true` set but not fully working
+- **Initial syntax errors**: Fixed but may need testing
+- **Permission handling**: Some operations require root in container
+
+### 📈 Recent Improvements
+- **Script consolidation**: 67 total scripts (20 active, 47 deprecated)
+- **Automated tools installation**: Runs on every start
+- **Fixed duplicate panel icons**: Removed redundant launchers
+- **X11 authorization**: Fixed "no protocol specified" errors
+- **Menu configuration**: Multiple approaches implemented
 
 ## 🤝 Contributing
 

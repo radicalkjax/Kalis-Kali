@@ -1,5 +1,8 @@
 # Documentation
 
+**Version:** 0.5-alpha  
+**Status:** Early Development
+
 Complete documentation for the Kali Linux Docker Desktop Environment.
 
 ## 🚀 Start Here

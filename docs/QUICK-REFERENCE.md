@@ -1,6 +1,9 @@
-# Quick Reference Cheatsheet
+# Quick Reference Guide
 
-Essential commands and paths for daily use.
+**Last Updated:** August 2024  
+**Version:** 0.5-alpha
+
+Essential commands, paths, and troubleshooting for the Kali Docker Desktop Environment.
 
 ## 🚀 Starting & Stopping
 
